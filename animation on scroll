@@ -1,0 +1,205 @@
+https://youtu.be/T33NN_pPeNI?si=tkTKwWeFFhAV0GdG
+
+I have a website. Using css Js and html. 
+I have a couple of sections. 
+I want to make an animation on scroll. How can I do that?
+
+You can create a scroll-triggered animation using CSS and JavaScript. Here's a simple example to get you started:
+
+1. **HTML:**
+   ```html
+   <div class="section" id="section1">
+       <!-- Your section content here -->
+   </div>
+   <div class="section" id="section2">
+       <!-- Your next section content here -->
+   </div>
+   ```
+
+2. **CSS:**
+   ```css
+   .section {
+       opacity: 0;
+       transform: translateY(20px);
+       transition: opacity 0.5s, transform 0.5s;
+   }
+
+   .section.show {
+       opacity: 1;
+       transform: translateY(0);
+   }
+   ```
+
+3. **JavaScript:**
+   ```javascript
+   document.addEventListener("DOMContentLoaded", function () {
+       window.addEventListener("scroll", revealOnScroll);
+
+       function revealOnScroll() {
+           var sections = document.querySelectorAll(".section");
+           
+           sections.forEach(function (section) {
+               var sectionTop = section.getBoundingClientRect().top;
+               var windowHeight = window.innerHeight;
+
+               if (sectionTop < windowHeight * 0.75) {
+                   section.classList.add("show");
+               } else {
+                   section.classList.remove("show");
+               }
+           });
+       }
+   });
+   ```
+
+This example fades in and slides up each section when it comes into view (75% of the window height). Adjust the transition values and percentages according to your design. Include this script at the end of your HTML body or use the `defer` attribute in the script tag.
+
+
+
+###################
+
+
+Can you use the intersection observer api?
+
+Certainly! The Intersection Observer API is a great choice for scroll-triggered animations. Here's an example using the Intersection Observer:
+
+1. **HTML:**
+   ```html
+   <div class="section" id="section1">
+       <!-- Your section content here -->
+   </div>
+   <div class="section" id="section2">
+       <!-- Your next section content here -->
+   </div>
+   ```
+
+2. **CSS:**
+   ```css
+   .section {
+       opacity: 0;
+       transform: translateY(20px);
+       transition: opacity 0.5s, transform 0.5s;
+   }
+
+   .section.show {
+       opacity: 1;
+       transform: translateY(0);
+   }
+   ```
+
+3. **JavaScript:**
+   ```javascript
+   document.addEventListener("DOMContentLoaded", function () {
+       const sections = document.querySelectorAll(".section");
+
+       const options = {
+           root: null,
+           rootMargin: "0px",
+           threshold: 0.75,
+       };
+
+       const observer = new IntersectionObserver(revealOnScroll, options);
+
+       sections.forEach((section) => {
+           observer.observe(section);
+       });
+
+       function revealOnScroll(entries, observer) {
+           entries.forEach((entry) => {
+               if (entry.isIntersecting) {
+                   entry.target.classList.add("show");
+                   observer.unobserve(entry.target);
+               }
+           });
+       }
+   });
+   ```
+
+This example uses the Intersection Observer API to add the "show" class to each section when it becomes 75% visible in the viewport. Adjust the threshold and transition values based on your design preferences.
+
+
+################
+
+Can I give different type of animation to different types of elements.
+
+For example I want the section to be revealed from the left.
+
+And I want the pictures to be revealed from top right.
+
+
+Absolutely! You can customize the animations for different types of elements. Here's an example where sections are revealed from the left, and pictures are revealed from the top right:
+
+1. **HTML:**
+   ```html
+   <div class="section left" id="section1">
+       <!-- Your section content here -->
+   </div>
+   <div class="section left" id="section2">
+       <!-- Your next section content here -->
+   </div>
+   <img class="picture top-right" src="your-image-source.jpg" alt="Your Image">
+   <img class="picture top-right" src="another-image-source.jpg" alt="Another Image">
+   ```
+
+2. **CSS:**
+   ```css
+   .section, .picture {
+       opacity: 0;
+       transition: opacity 0.5s, transform 0.5s;
+   }
+
+   .section.left {
+       transform: translateX(-20px);
+   }
+
+   .section.left.show {
+       opacity: 1;
+       transform: translateX(0);
+   }
+
+   .picture.top-right {
+       transform: translate(-20px, -20px);
+   }
+
+   .picture.top-right.show {
+       opacity: 1;
+       transform: translate(0, 0);
+   }
+   ```
+
+3. **JavaScript:**
+   ```javascript
+   document.addEventListener("DOMContentLoaded", function () {
+       const sections = document.querySelectorAll(".section");
+       const pictures = document.querySelectorAll(".picture");
+
+       const options = {
+           root: null,
+           rootMargin: "0px",
+           threshold: 0.75,
+       };
+
+       const sectionObserver = new IntersectionObserver(revealOnScroll, options);
+       const pictureObserver = new IntersectionObserver(revealOnScroll, options);
+
+       sections.forEach((section) => {
+           sectionObserver.observe(section);
+       });
+
+       pictures.forEach((picture) => {
+           pictureObserver.observe(picture);
+       });
+
+       function revealOnScroll(entries, observer) {
+           entries.forEach((entry) => {
+               if (entry.isIntersecting) {
+                   entry.target.classList.add("show");
+                   observer.unobserve(entry.target);
+               }
+           });
+       }
+   });
+   ```
+
+This example assumes that you have sections with the class "left" and pictures with the class "top-right." Adjust the classes and styles based on your specific HTML structure and design preferences.
+
